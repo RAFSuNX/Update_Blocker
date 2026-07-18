@@ -7,9 +7,13 @@ Verified on Pixel 6 Pro (panther), Android 14, build AP2A.240905.003.
 ## What it does
 
 - **Kills the executor**: overlays `/system/bin/update_engine` with a 0-byte file (systemless). Even if an OTA payload were downloaded, nothing can apply it.
-- **Kills the standalone updater**: on every boot (`post-fs-data.sh`), disables `com.google.android.factoryota` via `pm disable-user`.
+- **Kills the standalone updater**: after boot completes (`service.sh`), disables `com.google.android.factoryota` via `pm disable-user`.
 - **Does not touch `com.google.android.gms` or `com.google.android.gsf`** — disabling their update-related components risks breaking Play Integrity, account sync, and Play Store.
 - **On-demand cleanup**: tap "Action" for this module in KernelSU Manager to reset `update_engine`'s state and wipe any cached OTA payload files (`/data/ota_package`, GMS `app_dg_cache`).
+
+## Requirements
+
+Modifying `/system` files requires KernelSU's **OverlayFS MetaModule** (`meta-overlayfs`) to be installed as well — install it from the KernelSU Manager module browser before flashing this module (or reflash this module afterward if you installed meta-overlayfs later).
 
 ## Install
 
