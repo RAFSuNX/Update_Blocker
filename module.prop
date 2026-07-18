@@ -1,0 +1,6 @@
+id=update_blocker
+name=Update Blocker
+version=v1.0
+versionCode=1
+author=RAFSuNX
+description=Fully blocks Android OTA updates at the root level: nulls out /system/bin/update_engine (the A/B payload applier) and disables the GMS/GSF/factoryota update-check services at boot. Use the KernelSU Manager "Action" button to reset update_engine status and clear cached OTA payloads on demand.
