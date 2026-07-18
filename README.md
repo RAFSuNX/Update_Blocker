@@ -2,7 +2,7 @@
 
 KernelSU/Magisk module that blocks Android OTA updates at the root level — no network/hosts blocking, and no touching GMS/GSF.
 
-Verified on Pixel 6 Pro (panther), Android 14, build AP2A.240905.003.
+Verified on Pixel 7 Pro (panther), Android 14, build AP2A.240905.003.
 
 ## What it does
 
