@@ -38,17 +38,23 @@ clean_dir() {
 
 clean_dir /data/ota_package
 
-if ! factoryota_exists; then
-  echo "Update Blocker: $FACTORYOTA_PKG not found on this device, skipped"
-elif factoryota_disabled; then
-  echo "Update Blocker: $FACTORYOTA_PKG already disabled, nothing to do"
-else
-  echo "Update Blocker: $FACTORYOTA_PKG enabled, disabling..."
-  if pm disable-user --user 0 "$FACTORYOTA_PKG" >/dev/null 2>&1; then
-    echo "Update Blocker: $FACTORYOTA_PKG disabled"
-  else
-    echo "Update Blocker: failed to disable $FACTORYOTA_PKG"
-  fi
+if [ -z "$BLOCKED_PKGS" ]; then
+  echo "Update Blocker: no devices.json entry for '$DEVICE_KEY', nothing to disable"
 fi
+
+for pkg in $BLOCKED_PKGS; do
+  if ! pkg_exists "$pkg"; then
+    echo "Update Blocker: $pkg not found on this device, skipped"
+  elif pkg_disabled "$pkg"; then
+    echo "Update Blocker: $pkg already disabled, nothing to do"
+  else
+    echo "Update Blocker: $pkg enabled, disabling..."
+    if pm disable-user --user 0 "$pkg" >/dev/null 2>&1; then
+      echo "Update Blocker: $pkg disabled"
+    else
+      echo "Update Blocker: failed to disable $pkg"
+    fi
+  fi
+done
 
 echo "Update Blocker: done"

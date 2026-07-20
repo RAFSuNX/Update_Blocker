@@ -5,11 +5,13 @@
 
 . "$(dirname "$(readlink -f "$0")")/common.sh"
 
-if ! factoryota_exists; then
-  log -t UpdateBlocker "uninstall: $FACTORYOTA_PKG not found on this device, nothing to re-enable"
-elif ! factoryota_disabled; then
-  log -t UpdateBlocker "uninstall: $FACTORYOTA_PKG already enabled, nothing to do"
-else
-  log -t UpdateBlocker "uninstall: re-enabling $FACTORYOTA_PKG"
-  pm enable "$FACTORYOTA_PKG"
-fi
+for pkg in $BLOCKED_PKGS; do
+  if ! pkg_exists "$pkg"; then
+    log -t UpdateBlocker "uninstall: $pkg not found on this device, nothing to re-enable"
+  elif ! pkg_disabled "$pkg"; then
+    log -t UpdateBlocker "uninstall: $pkg already enabled, nothing to do"
+  else
+    log -t UpdateBlocker "uninstall: re-enabling $pkg"
+    pm enable "$pkg"
+  fi
+done
