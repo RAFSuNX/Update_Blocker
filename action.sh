@@ -6,11 +6,15 @@
 
 . "$(dirname "$(readlink -f "$0")")/common.sh"
 
-echo "Update Blocker: resetting update_engine state..."
-if update_engine_client --reset_status; then
-  echo "Update Blocker: update_engine state reset OK"
+if command -v update_engine_client >/dev/null 2>&1; then
+  echo "Update Blocker: resetting update_engine state..."
+  if update_engine_client --reset_status; then
+    echo "Update Blocker: update_engine state reset OK"
+  else
+    echo "Update Blocker: update_engine_client --reset_status failed (exit $?)"
+  fi
 else
-  echo "Update Blocker: update_engine_client --reset_status failed (exit $?)"
+  echo "Update Blocker: update_engine_client not present on this device, skipped"
 fi
 
 ota_dir=/data/ota_package
