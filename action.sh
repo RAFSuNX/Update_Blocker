@@ -17,25 +17,26 @@ else
   echo "Update Blocker: update_engine_client not present on this device, skipped"
 fi
 
-ota_dir=/data/ota_package
-ota_count=0
-[ -d "$ota_dir" ] && ota_count=$(ls -A "$ota_dir" 2>/dev/null | wc -l)
-if [ "$ota_count" -gt 0 ]; then
-  echo "Update Blocker: found $ota_count file(s) in $ota_dir, deleting"
-  find "${ota_dir:?}" -mindepth 1 -delete
-else
-  echo "Update Blocker: $ota_dir empty or missing, nothing to delete"
-fi
+clean_dir() {
+  dir="$1"
+  if [ ! -d "$dir" ]; then
+    echo "Update Blocker: $dir missing, nothing to delete"
+    return
+  fi
+  entries=$(find "$dir" -mindepth 1 -maxdepth 1 2>/dev/null)
+  if [ -z "$entries" ]; then
+    echo "Update Blocker: $dir empty, nothing to delete"
+    return
+  fi
+  echo "Update Blocker: found in $dir:"
+  echo "$entries" | while IFS= read -r path; do
+    echo "  - ${path#"$dir"/}"
+  done
+  find "${dir:?}" -mindepth 1 -delete
+  echo "Update Blocker: deleted $(echo "$entries" | wc -l) item(s) from $dir"
+}
 
-gms_cache_dir=/data/data/com.google.android.gms/app_dg_cache
-gms_count=0
-[ -d "$gms_cache_dir" ] && gms_count=$(ls -A "$gms_cache_dir" 2>/dev/null | wc -l)
-if [ "$gms_count" -gt 0 ]; then
-  echo "Update Blocker: found $gms_count file(s) in $gms_cache_dir, deleting"
-  find "${gms_cache_dir:?}" -mindepth 1 -delete
-else
-  echo "Update Blocker: $gms_cache_dir empty or missing, nothing to delete"
-fi
+clean_dir /data/ota_package
 
 if ! factoryota_exists; then
   echo "Update Blocker: $FACTORYOTA_PKG not found on this device, skipped"

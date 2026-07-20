@@ -9,7 +9,7 @@ Verified on Pixel 7 Pro (panther), Android 14, build AP2A.240905.003.
 - **Kills the executor**: overlays `/system/bin/update_engine` with a 0-byte file (systemless). Even if an OTA payload were downloaded, nothing can apply it.
 - **Kills the standalone updater**: after boot completes (`service.sh`), disables `com.google.android.factoryota` via `pm disable-user`.
 - **Does not touch `com.google.android.gms` or `com.google.android.gsf`** — disabling their update-related components risks breaking Play Integrity, account sync, and Play Store.
-- **On-demand cleanup**: tap "Action" for this module in KernelSU Manager to reset `update_engine`'s state and wipe any cached OTA payload files (`/data/ota_package`, GMS `app_dg_cache`).
+- **On-demand cleanup**: tap "Action" for this module in KernelSU Manager to reset `update_engine`'s state and wipe any cached OTA payload files in `/data/ota_package`, listing each file found before deleting it.
 
 ## Requirements
 
