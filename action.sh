@@ -36,7 +36,13 @@ clean_dir() {
   echo "Update Blocker: deleted $(echo "$entries" | wc -l) item(s) from $dir"
 }
 
-clean_dir /data/ota_package
+if [ -z "$BLOCKED_CACHE_DIRS" ]; then
+  echo "Update Blocker: no devices.json cache_dirs entry for '$DEVICE_KEY', nothing to clean"
+fi
+
+for dir in $BLOCKED_CACHE_DIRS; do
+  clean_dir "$dir"
+done
 
 if [ -z "$BLOCKED_PKGS" ]; then
   echo "Update Blocker: no devices.json entry for '$DEVICE_KEY', nothing to disable"

@@ -9,17 +9,17 @@ Verified on Pixel 7 Pro (panther), Android 14, build AP2A.240905.003.
 - **Kills the executor**: at install time, nulls out the OTA-apply binary(s) listed for your device in `devices.json` (systemless, via KernelSU's OverlayFS MetaModule) — e.g. `/system/bin/update_engine` on Pixel. Even if an OTA payload were downloaded, nothing can apply it.
 - **Kills the standalone updater(s)**: after boot completes (`service.sh`), disables the OTA app package(s) listed in `devices.json` for your device (e.g. `com.google.android.factoryota`) via `pm disable-user`.
 - **Does not touch `com.google.android.gms` or `com.google.android.gsf`** — disabling their update-related components risks breaking Play Integrity, account sync, and Play Store.
-- **On-demand cleanup**: tap "Action" for this module in KernelSU Manager to reset `update_engine`'s state and wipe any cached OTA payload files in `/data/ota_package`, listing each file found before deleting it.
+- **On-demand cleanup**: tap "Action" for this module in KernelSU Manager to reset `update_engine`'s state and wipe any cached OTA payload dir(s) listed in `devices.json` for your device (e.g. `/data/ota_package`, `/data/ota` on Pixel), listing each file found before deleting it.
 
 ## Multi-device support
 
-Which packages to disable and which binaries to null out is per `<device codename>-<Android version>` (e.g. `panther-14`), looked up from [`devices.json`](devices.json) at install time. This is deliberately **not** a "best guess" fallback: if your exact codename+version combo isn't listed, `customize.sh` aborts the install instead of applying possibly-wrong assumptions to unfamiliar hardware.
+Which packages to disable, which binaries to null out, and which cache dirs to clear is all per `<device codename>-<Android version>` (e.g. `panther-14`), looked up from [`devices.json`](devices.json) at install time. This is deliberately **not** a "best guess" fallback: if your exact codename+version combo isn't listed, `customize.sh` aborts the install instead of applying possibly-wrong assumptions to unfamiliar hardware.
 
 To add support for your device:
-1. Confirm the OTA-apply binary path(s) and OTA app package name(s) on your device/Android version.
+1. Confirm the OTA-apply binary path(s), OTA app package name(s), and OTA cache dir(s) on your device/Android version.
 2. Add an entry to `devices.json` keyed `"<codename>-<version>"`, e.g.:
    ```json
-   "yourdevice-15": {"packages": ["com.example.ota"], "binaries": ["/system/bin/update_engine"]}
+   "yourdevice-15": {"packages": ["com.example.ota"], "binaries": ["/system/bin/update_engine"], "cache_dirs": ["/data/ota_package"]}
    ```
 3. Open a PR.
 

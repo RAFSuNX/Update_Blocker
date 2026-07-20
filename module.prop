@@ -1,6 +1,6 @@
 id=update_blocker
 name=Update Blocker
-version=v1.9
-versionCode=10
+version=v1.10
+versionCode=11
 author=RAFSuNX
 description=Blocks Android OTA updates at the root level. Per-device/Android-version config in devices.json nulls the OTA-apply binary and disables the OTA app package. Does not touch GMS/GSF. Requires the OverlayFS MetaModule (meta-overlayfs). Use the Action button to reset update_engine and clear OTA cache.
