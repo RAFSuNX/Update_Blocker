@@ -8,9 +8,14 @@
 
 . "$(dirname "$(readlink -f "$0")")/common.sh"
 
+log -t UpdateBlocker "boot: attempting to disable $FACTORYOTA_PKG (retrying up to 60s for Package Manager to come up)"
+
 i=0
 while [ $i -lt 30 ]; do
-  pm disable-user --user 0 "$FACTORYOTA_PKG" >/dev/null 2>&1 && exit 0
+  if pm disable-user --user 0 "$FACTORYOTA_PKG" >/dev/null 2>&1; then
+    log -t UpdateBlocker "boot: $FACTORYOTA_PKG disabled after ${i}x2s retries"
+    exit 0
+  fi
   sleep 2
   i=$((i + 1))
 done
