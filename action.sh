@@ -18,7 +18,7 @@ ota_count=0
 [ -d "$ota_dir" ] && ota_count=$(ls -A "$ota_dir" 2>/dev/null | wc -l)
 if [ "$ota_count" -gt 0 ]; then
   echo "Update Blocker: found $ota_count file(s) in $ota_dir, deleting"
-  rm -rf "${ota_dir:?}"/*
+  find "${ota_dir:?}" -mindepth 1 -delete
 else
   echo "Update Blocker: $ota_dir empty or missing, nothing to delete"
 fi
@@ -28,7 +28,7 @@ gms_count=0
 [ -d "$gms_cache_dir" ] && gms_count=$(ls -A "$gms_cache_dir" 2>/dev/null | wc -l)
 if [ "$gms_count" -gt 0 ]; then
   echo "Update Blocker: found $gms_count file(s) in $gms_cache_dir, deleting"
-  rm -rf "${gms_cache_dir:?}"/*
+  find "${gms_cache_dir:?}" -mindepth 1 -delete
 else
   echo "Update Blocker: $gms_cache_dir empty or missing, nothing to delete"
 fi
