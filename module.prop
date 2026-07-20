@@ -1,6 +1,6 @@
 id=update_blocker
 name=Update Blocker
-version=v1.4
-versionCode=5
+version=v1.5
+versionCode=6
 author=RAFSuNX
 description=Blocks Android OTA updates at the root level on Pixel. Nulls out /system/bin/update_engine and disables the Factory OTA app. Does not touch GMS/GSF. Requires the OverlayFS MetaModule (meta-overlayfs). Use the Action button to reset update_engine and clear OTA cache.

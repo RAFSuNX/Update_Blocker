@@ -33,15 +33,17 @@ else
   echo "Update Blocker: $gms_cache_dir empty or missing, nothing to delete"
 fi
 
-if pm list packages 2>/dev/null | grep -q ":$FACTORYOTA_PKG$"; then
-  echo "Update Blocker: $FACTORYOTA_PKG present, disabling..."
+if ! factoryota_exists; then
+  echo "Update Blocker: $FACTORYOTA_PKG not found on this device, skipped"
+elif factoryota_disabled; then
+  echo "Update Blocker: $FACTORYOTA_PKG already disabled, nothing to do"
+else
+  echo "Update Blocker: $FACTORYOTA_PKG enabled, disabling..."
   if pm disable-user --user 0 "$FACTORYOTA_PKG" >/dev/null 2>&1; then
     echo "Update Blocker: $FACTORYOTA_PKG disabled"
   else
     echo "Update Blocker: failed to disable $FACTORYOTA_PKG"
   fi
-else
-  echo "Update Blocker: $FACTORYOTA_PKG not found on this device, skipped"
 fi
 
 echo "Update Blocker: done"
